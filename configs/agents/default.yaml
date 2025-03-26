@@ -1,0 +1,31 @@
+# Default configuration for all agents
+
+# Common settings for all agents
+common:
+  timeout: 10  # seconds
+  retry_attempts: 2
+
+# Sentiment agent configuration
+sentiment:
+  enabled: true
+  weight: 0.25
+  threshold: 0.6
+
+# Grammar agent configuration
+grammar:
+  enabled: true
+  weight: 0.15
+  threshold: 0.5
+
+# URL agent configuration
+url:
+  enabled: true
+  weight: 0.30
+  threshold: 0.7
+  url_pattern: 'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+'
+
+# Domain agent configuration
+domain:
+  enabled: false
+  weight: 0.30
+  threshold: 0.6 
