@@ -22,7 +22,7 @@ url:
   enabled: true
   weight: 0.30
   threshold: 0.7
-  url_pattern: 'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+'
+  url_pattern: https?://[^\s]+|www\.[^\s]+
 
 # Domain agent configuration
 domain:

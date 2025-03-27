@@ -18,9 +18,9 @@ class TextAnalysisPipeline:
         self.log = logging.getLogger(__name__)
 
     def analyze(self, text):
-        # Step 1: Clean the text using CleaningAgent
-        cleaning_agent = CleaningAgent(self.cfg)
-        cleaned_text = cleaning_agent.analyze(text)
+        # cleaning_agent = CleaningAgent(self.cfg)
+        # cleaned_text = cleaning_agent.analyze(text)
+        cleaned_text = text
 
         if self.cfg["agents"]["sentiment"]["enabled"]:
             self.log.info("Running sentiment analysis...")

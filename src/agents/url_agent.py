@@ -2,48 +2,52 @@ import re
 import json
 import logging
 from omegaconf import DictConfig
-from .base_agent import BaseAgent
+from transformers import BertTokenizerFast, BertForSequenceClassification, pipeline
+import torch
 
 
-class URLAgent(BaseAgent):
+class URLAgent:
     def __init__(self, cfg: DictConfig):
-        super().__init__(cfg)
-        self.weight = cfg["agents"]["url"]["weight"]
-        self.threshold = cfg["agents"]["url"]["threshold"]
+        model_name = "CrabInHoney/urlbert-tiny-v3-phishing-classifier"
+        tokenizer = BertTokenizerFast.from_pretrained(model_name)
+        model = BertForSequenceClassification.from_pretrained(model_name)
+        self.classifier = pipeline(
+                            "text-classification",
+                            model=model,
+                            tokenizer=tokenizer,
+                            device=0 if torch.cuda.is_available() else -1,
+                            top_k=1
+                        )
+        self.label_mapping = {"LABEL_0": 0, "LABEL_1": 1}
+
         self.url_pattern = cfg["agents"]["url"]["url_pattern"]
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.logger.info(f"URL agent initialized with weight: {self.weight}, threshold: {self.threshold}")
     
     def analyze(self, text):
         self.logger.info("Analyzing text for URLs and phishing indicators")
         
         url_pattern = self.url_pattern
         urls = re.findall(url_pattern, text)
-        
+
         if not urls:
             self.logger.info("No URLs found in the text")
             return {
-                "urls": [],
-                "phishing_likelihood": 0,
-                "malicious_url_count": 0,
                 "spam_likelihood": 0,
                 "reasoning": "No URLs found in the text"
             }
+        spam_liklihood_flag = False
+        spam_liklihood = 0
+        for url in urls:
+            pred = self.classifier(url)[0][0]
+            current_liklihood = pred["score"] if pred["label"] == "LABEL_1" else 1 - pred["score"]
+            spam_liklihood += current_liklihood
+            if pred["label"] == "LABEL_1":
+                spam_liklihood_flag = True
+                break
+        if spam_liklihood_flag:
+            spam_res = current_liklihood
+        else:
+            spam_res = spam_liklihood / len(urls)
+        return {"spam_likelihood": spam_res,
+                "reasoning": "One of the URLs is predicted as phishing" if spam_liklihood_flag else "averaged predicted over URLs"}
         
-        self.logger.info(f"Found {len(urls)} URLs in the text: {urls}")
-        
-        system_prompt = self.prompts.URL_SYSTEM
-        user_prompt = self.prompts.URL_USER.format(urls=', '.join(urls))
-        
-        try:
-            result = self.query_llm(system_prompt, user_prompt, schema=UrlOutput)
-            return result
-        except (json.JSONDecodeError, AttributeError) as e:
-            self.logger.error(f"Failed to parse LLM response: {e}")
-            return UrlOutput(
-                url_analysis=[],
-                suspicious_characteristics=[],
-                phishing_likelihood=0,
-                spam_likelihood=0,
-                reasoning="Failed to parse LLM response"
-            ) 
