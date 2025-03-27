@@ -1,7 +1,7 @@
 import streamlit as st
 from omegaconf import OmegaConf
 from hydra import compose, initialize
-from pipeline import TextAnalysisPipeline
+from src.pipeline import TextAnalysisPipeline
 
 @st.cache_data
 def load_config():    

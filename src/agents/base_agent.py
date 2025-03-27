@@ -1,9 +1,13 @@
+import pyrootutils
+root  = pyrootutils.setup_root(__file__, 
+                               pythonpath=True,
+                               cwd=True)
 import requests
 import json
 from ollama import chat
 import logging
 from omegaconf import DictConfig
-from prompts import Prompts
+from src.prompts import Prompts
 import re
 import os
 from pydantic import BaseModel, ValidationError  # Import Pydantic

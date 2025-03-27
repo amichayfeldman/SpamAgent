@@ -1,9 +1,14 @@
-from agents.sentiment_agent import SentimentAgent
-from agents.grammar_agent import GrammarAgent
-from agents.url_agent import URLAgent
-from agents.domain_agent import DomainAgent
-from agents.cleaning_agent import CleaningAgent
-from decision_engine import DecisionEngine
+import pyrootutils
+root  = pyrootutils.setup_root(__file__, 
+                               pythonpath=True,
+                               cwd=True)
+
+from src.agents.sentiment_agent import SentimentAgent
+from src.agents.grammar_agent import GrammarAgent
+from src.agents.url_agent import URLAgent
+from src.agents.domain_agent import DomainAgent
+from src.agents.cleaning_agent import CleaningAgent
+from src.decision_engine import DecisionEngine
 import logging
 
 class TextAnalysisPipeline:
