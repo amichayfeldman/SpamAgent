@@ -4,8 +4,8 @@ import pandas as pd
 
 class DecisionEngine:
     def __init__(self, cfg: DictConfig):
-        self.weights = cfg.decision_engine.weights
-        self.spam_threshold = cfg.decision_engine.spam_threshold
+        self.weights = cfg["decision_engine"]["weights"]
+        self.spam_threshold = cfg["decision_engine"]["spam_threshold"]
         self.logger = logging.getLogger(self.__class__.__name__)
     
     def make_decision(self, 
@@ -14,10 +14,10 @@ class DecisionEngine:
                       url_result, 
                       domain_result):
         components = [
-            (sentiment_result["spam_likelihood"], self.weights.sentiment),
-            (grammar_result["spam_likelihood"], self.weights.grammar),
-            (url_result["spam_likelihood"], self.weights.url),
-            (domain_result["spam_likelihood"], self.weights.domain)
+            (sentiment_result["spam_likelihood"], self.weights["sentiment"]),
+            (grammar_result["spam_likelihood"], self.weights["grammar"]),
+            (url_result["spam_likelihood"], self.weights["url"]),
+            (domain_result["spam_likelihood"], self.weights["domain"])
         ]
         valid_components = list(filter(lambda x: x[0] is not None, components))
         total_weights = sum(weight for _, weight in valid_components)
@@ -49,7 +49,7 @@ class DecisionEngine:
         
         return {
             "is_spam": is_spam,
-            "confidence": final_score,
+            "confidence": final_score if is_spam else round(1-final_score, 2),
             "reasoning": reasoning,
             "agent_scores": {
                 "sentiment": sentiment_result["spam_likelihood"],

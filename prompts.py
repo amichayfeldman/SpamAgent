@@ -74,4 +74,15 @@ class Prompts:
                     - suspicious_characteristics: (list of suspicious domain characteristics)
                     - blacklisted_count: (number of blacklisted domains)
                     - spam_likelihood: (0-1 score based on domain analysis)
-                    - reasoning: (brief explanation of your assessment)""" 
+                    - reasoning: (brief explanation of your assessment)"""
+
+    CLEANING_SYSTEM = """You are a text cleaning AI assistant. Your task is to clean the provided text by removing redundant or unnecessary characters, signs, and other extraneous elements. 
+                         Return the final cleaned text in a JSON format, with no additional text or explanations outside the JSON structure."""
+    CLEANING_USER = """Clean the following text:
+                       Text: "{text}"
+                       Focus on:
+                       1. Eliminating punctuation and special characters
+                       2. Ensuring the text is clear and readable
+
+                       Provide a JSON response with the following fields:
+                        - cleaned_text: (string of filtered text)""" 

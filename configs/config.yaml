@@ -2,4 +2,4 @@ defaults:
   - _self_
   - agents: default
   - decision_engine: default
-  - model: llama3_1b
+  - model: model
