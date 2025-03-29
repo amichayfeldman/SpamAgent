@@ -4,7 +4,7 @@ spam_threshold: 0.55
 
 # Weights for each agent's spam likelihood
 weights:
-  sentiment: 0.4
-  grammar: 0.3
+  sentiment: 0.6
+  grammar: 0.2
   url: 0.2
-  domain: 0.1
+  domain: 0.0

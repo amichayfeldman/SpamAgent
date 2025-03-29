@@ -11,13 +11,12 @@ class DecisionEngine:
     def make_decision(self, 
                       sentiment_result, 
                       grammar_result, 
-                      url_result, 
-                      domain_result):
+                      url_result):
         components = [
             (sentiment_result["spam_likelihood"], self.weights["sentiment"]),
             (grammar_result["spam_likelihood"], self.weights["grammar"]),
-            (url_result["spam_likelihood"], self.weights["url"]),
-            (domain_result["spam_likelihood"], self.weights["domain"])
+            (url_result["spam_likelihood"], self.weights["url"])#,
+            # (domain_result["spam_likelihood"], self.weights["domain"])
         ]
         valid_components = list(filter(lambda x: x[0] is not None, components))
         total_weights = sum(weight for _, weight in valid_components)
@@ -36,8 +35,8 @@ class DecisionEngine:
         if url_result["spam_likelihood"] is not None and url_result["spam_likelihood"] > 0.5:
             reasoning.append(f"URL analysis: {url_result['reasoning']}")
         
-        if domain_result["spam_likelihood"] is not None and domain_result["spam_likelihood"] > 0.5:
-            reasoning.append(f"Domain analysis: {domain_result['reasoning']}")
+        # if domain_result["spam_likelihood"] is not None and domain_result["spam_likelihood"] > 0.5:
+        #     reasoning.append(f"Domain analysis: {domain_result['reasoning']}")
         
         if is_spam and not reasoning:
             reasoning.append("Combined factors indicate spam despite no single strong indicator")
@@ -54,13 +53,13 @@ class DecisionEngine:
             "agent_scores": {
                 "sentiment": sentiment_result["spam_likelihood"],
                 "grammar": grammar_result["spam_likelihood"],
-                "url": url_result["spam_likelihood"],
-                "domain": domain_result["spam_likelihood"]
+                "url": url_result["spam_likelihood"]#,
+                # "domain": domain_result["spam_likelihood"]
             },
             "detailed_results": {
                 "sentiment": sentiment_result,
                 "grammar": grammar_result,
-                "url": url_result,
-                "domain": domain_result
+                "url": url_result#,
+                # "domain": domain_result
             }
         } 
