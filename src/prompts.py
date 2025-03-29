@@ -20,7 +20,17 @@ class Prompts:
                         - persuasive_tactics: (list of specific tactics used)
                         - deceptive_language: (0-1 score)
                         - spam_likelihood: (0-1 score based on sentiment and manipulation)
-                        - reasoning: (brief explanation of your assessment)"""
+                        - reasoning: (brief explanation of your assessment)
+                        
+                        example:
+                        message: Dear [Name], Your appointment is confirmed for March 30th at 2:00 PM. 
+                                 Please contact us if you need to reschedule.Best regards, Customer Service Team.
+                        spam_liklihood: 0.
+                        
+                        message: Dear User,Your account will be permanently suspended in 24 HOURS due to 
+                                 suspicious activity! ACT IMMEDIATELY to prevent loss of access! 
+                                 THIS IS YOUR LAST CHANCE!.
+                        spam_liklihood: 1"""
 
     GRAMMAR_SYSTEM = BASE_SYSTEM.format(specialty="grammatical analysis and linguistic pattern detection")
     GRAMMAR_USER = """Analyze the following text for grammatical anomalies and unnatural language patterns:
@@ -39,7 +49,17 @@ class Prompts:
                     - bot_generated_likelihood: (0-1 score)
                     - non_native_likelihood: (0-1 score)
                     - spam_likelihood: (0-1 score based on grammar analysis)
-                    - reasoning: (brief explanation of your assessment)"""
+                    - reasoning: (brief explanation of your assessment).
+                    
+                    example:
+                    message: Dear Customer, Your payment has been successfully processed. Let us know if you need any assistance.
+                    Best regards,
+                    Billing Support.
+                    spam_liklihood:0.
+                    
+                    message: DEAR CUSTOMER, YOUR PAYMENT NOT RECEIVED!!! SEND DETAILS IMMEDIATELY OR ACCOUNT WILL BE BLOCKED FOREVER!!!
+                             ACT NOW!!!.
+                    spam_liklihood: 1"""
     
     URL_SYSTEM = BASE_SYSTEM.format(specialty="URL and phishing link analysis")
     URL_USER = """Analyze the following URLs for phishing and malicious characteristics:
@@ -56,7 +76,12 @@ class Prompts:
                 - suspicious_characteristics: (list of suspicious URL characteristics)
                 - phishing_likelihood: (0-1 score)
                 - spam_likelihood: (0-1 score based on URL analysis)
-                - reasoning: (brief explanation of your assessment)"""
+                - reasoning: (brief explanation of your assessment)
+                
+                example:
+                url: https://www.example.com/reset-password, spam_liklihood: 0.
+                url: http://secure-login-verification123.xyz, spam_liklihood: 1"""
+    
     
     DOMAIN_SYSTEM = BASE_SYSTEM.format(specialty="domain reputation and credibility assessment")
     DOMAIN_USER = """Analyze the following domains for reputation and spam characteristics:
